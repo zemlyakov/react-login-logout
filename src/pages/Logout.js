@@ -1,19 +1,25 @@
-import { Redirect } from "react-router-dom";
-import EitherLoginRoute from "../components/EitherLoginRoute";
-import { logOut } from "../services/auth";
+import { Redirect, useHistory } from "react-router-dom";
+import { isLoggedIn, logOut } from "../services/auth";
+import Alert from "../components/Alert";
 
 const Logout = () => {
-    return (
-        <EitherLoginRoute>
-            <div>
-                <h3>Logout Page</h3>
-                <div>Hi, Marcus</div>
-                <button onClick={logOut}>
-                    Logout
-                </button>
-            </div>
+    const history = useHistory();
+    const handleLogout = () => {
+        logOut();
+        history.push('/login');
+    };
+    return isLoggedIn() ? (
+        <div>
+            <h3>Logout Page</h3>
+            <div>Hi, Marcus</div>
+            <button onClick={handleLogout}>
+                Logout
+            </button>
+        </div>
+    ) : (
+        <Alert message="You are not allowed to view logout page. Please, log in">
             <Redirect to="/login"/>
-        </EitherLoginRoute>
+        </Alert>
     );
 };
 
